@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-v2
+  labels:
+    role: frontend
+    version: v2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      role: frontend
+      version: v2
+  template:
+    metadata:
+      labels:
+        role: frontend
+        version: v2
+    spec:
+      containers:
+      - name: webapp
+        image: cloudacademydevops/webappecho:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/go/bin/demo"]
+        ports:
+        - containerPort: 80
+        env:
+        - name: MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: webapp-cfg-v2
+              key: message
+        - name: BACKGROUND_COLOR
+          valueFrom:
+            configMapKeyRef:
+              name: webapp-cfg-v2
+              key: bgcolor
+A Deployment is used to describe the desired state of a ReplicaSet. The Kubernetes Deployment Controller will change the actual state to the desired state specified in the Deployment (by creating, modifying, or destroying ReplicaSets).
+
+ReplicaSets are responsible for creating Pods. ReplicaSets are considered a building block in Kubernetes and not objects that Kubernetes users or administrators should manually create.
