@@ -1,0 +1,19 @@
+Understand how the single Kubernetes Service registers both the V1 and V2 Deployment frontend pods. It purposely references the role: frontend label only:
+
+ frontend:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    role: frontend
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    role: frontend
+A Service is an abstraction that allows you to expose the Pods created by a Deployment to in-cluster network traffic. A Service has it's own DNS name internally in a Kubernetes cluster. By using this abstraction to access a Deployment's Pods, Pods behind the Service can be added and removed without affecting availability of the Deployment.
