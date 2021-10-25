@@ -1,0 +1,157 @@
+
+
+ 
+
+3. Go ahead and now deploy these Kubernetes resources into the cluster. To do so open a new terminal session by right-clicking on the App directory and then select the Open in Terminal option:
+
+
+ 
+
+4. A new terminal session is presented in the bottom pane:
+
+
+ 
+
+5. Confirm that you are in the /home/project/code/App directory. In the terminal execute the following command:
+
+cd /home/project/code/App && ls -la
+
+
+6. Use the kubectl command to deploy all resources declared in the k8s/app.yaml file into the cluster. In the terminal execute the following command:
+
+kubectl apply -f k8s/app.yaml
+
+ 
+
+7. Confirm that all 5 resources have been created successfully. In the terminal execute the following command:
+
+
+kubectl get all
+
+
+1. Expand the Files tree view by clicking on the Files tab on the left handside menu, and then open the project/code/App/istio/traffic.routing.yaml file.
+
+Examine its contents. The traffic.routing.yaml file declares the following 3 Istio custom resources:
+
+
+
+ 
+
+2. Within the traffic.routing.yaml file review each individual Istio resource:
+
+ 
+
+3. Go ahead and now deploy all 3 Istio custom resources. Within the existing terminal session, execute the following command:
+
+
+kubectl apply -f istio/traffic.routing.yaml
+
+
+4. Confirm that all 3 Istio custom resources were created successfully. In the terminal execute the following command:
+
+kubectl get dr,gw,vs -n default
+
+ 
+
+5. Retrieve the Kubernetes Ingress NodePort URL by issuing the following command:
+
+export | grep K8S_INGRESS_NODEPORT_URL
+
+
+This URL has been automatically generated for you behind the scenes and can be used to direct public traffic into the Kubernetes cluster, which you will next do. This is only required  - since it is utilising Minikube to host the Kubernetes cluster.
+
+Note: Your URL will differ from the one shown in the screenshot above.
+
+ 
+
+6. Using your own workstations browser - browse to the URL provided in the output of the previous instruction:
+
+Note: At this stage both V1 (yellow) and V2 (cyan) versions of the sample web application are being load balanced - therefore either version could be returned
+ 
+
+7. Refresh the current URL repeatedly. You should see alternate versions balanced (approx 50/50) across V1 and V2, versions of the sample web application:
+
+Keep this browser tab open. You will use it again later.
+
+ 
+
+8. Returning back to the terminal session, run the following command to quickly generate and log 100 requests:
+
+
+for i in {1..100}; do curl -s $K8S_INGRESS_NODEPORT_URL; done | grep CloudAcademy.v > web.log
+
+
+9. To display the contents of the generated web.log file, execute the following command:
+
+cat web.log
+
+Note: The exact distribution of traffic to versions V1 and V2 will differ (but should be approximatey 50% to each).
+
+ 
+
+10. Count the number of requests that were routed to the V1 version of the sample web application. In the terminal execute the following command:
+
+
+grep v1.0.0 web.log | wc -l
+
+
+11. Count the number of requests that were routed to the V2 version of the sample web application. In the terminal execute the following command:
+
+grep v2.0.0 web.log | wc -l
+
+see dif f version
+
+
+
+ 
+
+2. Go ahead and redeploy the updated VirtualService resource. Within the existing terminal session, execute the following command:
+
+kubectl apply -f istio/traffic.routing.yaml
+alt
+
+ 
+
+3. Confirm that the Istio VirtualService has indeed been updated with the new 80/20 weights. In the terminal execute the following command:
+
+
+kubectl describe vs frontend-vs | grep Weight
+
+
+ 
+4. Return to your browser tab with the sample web application and refresh the page:
+
+
+
+5. Refresh the current URL repeatedly.
+
+You should see alternate versions, V1 and V2, of the sample web application. Confirm that approximately 80% of requests are responded to by V1 (yellow) and the remaining 20% by V2 (cyan):
+
+
+
+Note: The exact distribution of traffic to versions V1 and V2 will differ (but should be approximatey 80% to V1 and 20% to V2).
+
+ 
+
+6. Returning back to the terminal session, rerun the following command to again quickly generate and log 100 requests. In the terminal execute the following command:
+
+
+for i in {1..100}; do curl -s $K8S_INGRESS_NODEPORT_URL; done | grep CloudAcademy.v > web.log
+
+
+7. Count the number of requests that were routed to the V1 version of the sample web application. In the terminal execute the following command:
+
+
+grep v1.0.0 web.log | wc -l
+
+Note: Your count returned will likely differ to that shown in the above screenshot.
+
+ 
+
+8. Count the number of requests that were routed to the V2 version of the sample web application. In the terminal execute the following command:
+
+
+grep v2.0.0 web.log | wc -l
+
+
+Note: Your count returned will likely differ to that shown in the above screenshot.
