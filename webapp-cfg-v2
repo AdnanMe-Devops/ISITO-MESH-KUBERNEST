@@ -1,0 +1,16 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-cfg-v2
+  labels:
+    version: v2
+data:
+  message: "CloudAcademy.v2.0.0"
+  bgcolor: "cyan"
+A ConfigMap is an Kubernetes API object used to store non-sensitive configuration data in key-value pairs. A ConfigMap can be consumed by a Pod in the following ways:
+
+As an environment variable
+As a command-line argument
+As a file in a volume
+ ConfigMap values are exposed to pods as environment variables.
