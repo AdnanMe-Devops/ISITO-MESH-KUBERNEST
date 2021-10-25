@@ -1,0 +1,20 @@
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: frontend-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - app.cloudacademy.34.222.60.251.nip.io
+In Istio, the Gateway resource describes a load-balancer. Gateway options you can configure include:
+
+Which ports should be exposed
+Protocol of the traffic
+Server Name Indication (SNI) configuration (used to host multiple secure websites through a single IP address)
