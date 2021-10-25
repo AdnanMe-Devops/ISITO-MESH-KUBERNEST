@@ -1,0 +1,29 @@
+Within the traffic.routing.yaml file, update the VirtualService resource, so that 80% of all incoming traffic is routed to V1, with the remaining 20% being routed to V2. This is accomplished by updating the weight values: 
+
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend-vs
+spec:
+  hosts:
+  - app.cloudacademy.34.222.60.251.nip.io
+  gateways:
+  - frontend-gateway
+  http:
+  - route:
+    - destination:
+        host: frontend.default.svc.cluster.local
+        subset: v1
+        port:
+          number: 80
+      weight: 80
+    - destination:
+        host: frontend.default.svc.cluster.local
+        subset: v2
+        port:
+          number: 80
+      weight: 20
+
+
+Note: Make sure you save the updated traffic.routing.yaml file, before redeploying (CTRL-S).
