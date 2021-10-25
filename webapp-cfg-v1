@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-cfg-v1
+  labels:
+    version: v1
+data:
+  message: "CloudAcademy.v1.0.0"
+  bgcolor: "yellow"
