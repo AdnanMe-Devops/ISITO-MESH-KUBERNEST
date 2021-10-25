@@ -1,0 +1,42 @@
+Understand how each Kubernetes Deployment references its own version specific ConfigMap:
+
+ frontend-v1:
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-v1
+  labels:
+    role: frontend
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      role: frontend
+      version: v1
+  template:
+    metadata:
+      labels:
+        role: frontend
+        version: v1
+    spec:
+      containers:
+      - name: webapp
+        image: cloudacademydevops/webappecho:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/go/bin/demo"]
+        ports:
+        - containerPort: 80
+        env:
+        - name: MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: webapp-cfg-v1
+              key: message
+        - name: BACKGROUND_COLOR
+          valueFrom:
+            configMapKeyRef:
+              name: webapp-cfg-v1
+              key: bgcolor
