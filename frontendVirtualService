@@ -1,0 +1,31 @@
+VirtualService
+
+Understand how the Istio VirtualService resource declares 2 destination routes, each of which references a different subset (declared in the DestinationRule). Both destination routes use the same FQDN host - which in this case is the one assigned by Kubernetes to the frontend Service (deployed previously into the default namespace).
+
+ frontend:
+
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend-vs
+spec:
+  hosts:
+  - app.cloudacademy.34.222.60.251.nip.io
+  gateways:
+  - frontend-gateway
+  http:
+  - route:
+    - destination:
+        host: frontend.default.svc.cluster.local
+        subset: v1
+        port:
+          number: 80
+      weight: 50
+    - destination:
+        host: frontend.default.svc.cluster.local
+        subset: v2
+        port:
+          number: 80
+      weight: 50
+A VirtualService is used to route traffic. It is similar to the Kubernetes Ingress resource. However, it is more configurable and can be used to route internal cluster traffic in addition to external traffic.
